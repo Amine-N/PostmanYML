@@ -1,0 +1,214 @@
+{
+	"info": {
+		"_postman_id": "c74a161f-266f-4ced-95db-261087915c89",
+		"name": "Grocery store",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "34658050",
+		"_collection_link": "https://www.postman.com/crimson-capsule-460806/workspace/workspaces-remtest/collection/34658050-c74a161f-266f-4ced-95db-261087915c89?action=share&source=collection_link&creator=34658050"
+	},
+	"item": [
+		{
+			"name": "Status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseurl}}status"
+			},
+			"response": []
+		},
+		{
+			"name": "Products",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const products = pm.response.json();\r",
+							"const index = Math.floor(Math.random() * products.length)\r",
+							"\r",
+							"pm.collectionVariables.set(\"productId\", products[index].id);\r",
+							"\r",
+							"console.log(products)\r",
+							"console.log(index)"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseurl}}products"
+			},
+			"response": []
+		},
+		{
+			"name": "Get products id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseurl}}products/{{productId}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Create cart",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();\r",
+							"console.log(response);\r",
+							"\r",
+							"pm.collectionVariables.set(\"cartId\", response.cartId);\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{baseurl}}carts"
+			},
+			"response": []
+		},
+		{
+			"name": "Get a cartId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseurl}}carts/{{cartId}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Get cart items",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();\r",
+							"console.log(response);\r",
+							"pm.collectionVariables.set(\"itemId\", response.itemId);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"productId\": \"{{productId}}\"\r\n\t\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{baseurl}}/carts/{{cartId}}/items"
+			},
+			"response": []
+		},
+		{
+			"name": "Add an item",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"productId\": 1234,\r\n\t\"quantity\": 3\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{baseUrl}}carts/{{cartId}}/items/{{itemId}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Item",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "{{baseurl}}/carts/{{cartId}}/items/{{itemId}}"
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "productId",
+			"value": ""
+		},
+		{
+			"key": "cartId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "baseUrl",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "itemId",
+			"value": ""
+		}
+	]
+}
